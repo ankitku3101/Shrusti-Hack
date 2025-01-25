@@ -6,7 +6,7 @@ export default function Home() {
       
       <header className="text-center py-16">
         <h1 className="text-5xl font-extrabold mb-4">
-          Transform School Data into Insights 🚀
+          Transform your School Data into Insights 🚀
         </h1>
         <p className="text-lg mb-6 font-light">
           Empower schools with real-time dashboards, actionable insights, and enhanced decision-making.
