@@ -2,6 +2,27 @@ import mongoose from "mongoose";
 
 const SchoolSchema = new mongoose.Schema(
     {
+        email:{
+            type:String,
+            lowercase:true,
+            trim:true,
+            required:true,
+        },
+        password:{
+            type:String,
+            trim:true,
+            required:true
+        },
+        username:{
+            type:String,
+            lowercase:true,
+            trim:true,
+            required:true
+        },
+        contact:{
+            type:Number,
+            required:true
+        },
         schoolname:{
             type:String,
             lowercase:true,
