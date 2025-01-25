@@ -2,13 +2,14 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/lib/mongodb";
+import School from "@/lib/mongodb"
 
 export const authOptions: NextAuthOptions = {
     providers: [
       CredentialsProvider({
         name: "Credentials",
         credentials: {
-          username: { label: "Email", type: "text", placeholder: "Enter your email" },
+          username: { label: "Username", type: "text", placeholder: "Enter your username" },
           password: { label: "Password", type: "password", placeholder: "Enter your password" },
         },
         async authorize(credentials: any) {
@@ -21,7 +22,7 @@ export const authOptions: NextAuthOptions = {
   
             await dbConnect();
   
-            let user = await Student.findOne({ email }) || await Employer.findOne({ email }) || await University.findOne({ email });
+            let user = await School.findOne({ schoolname }) 
   
             if (!user) {
               throw new Error("Invalid email or password");
