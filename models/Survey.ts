@@ -14,14 +14,28 @@ const SurveySchema = new mongoose.Schema(
             type:mongoose.Schema.Types.ObjectId,
             ref:"Performance"
         },
-        ReviewDoc:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Reviews"
-        },
-        Satisfcation:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Satisfaction"
-        },
+        ReviewDoc:[
+            {
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"Reviews"
+            }
+        ],
+        Satisfcation:[
+            {
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"Satisfaction"
+            }
+        ],
+        pros:[
+            {
+                type:String
+            }
+        ],
+        cons:[
+            {
+                type:String
+            }
+        ],
         FinalRating:{
             type:Number,
             min:[0,"Number can not be negative"],

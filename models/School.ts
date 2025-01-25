@@ -73,12 +73,10 @@ const SchoolSchema = new mongoose.Schema(
         },
         numberofstudents:{
             type:Number,
-            required:true,
             min:[0,"Studet number can't be less than 0"]
         },
         numberofteacher:{
             type:Number,
-            required:true,
             min:[0,"Studet number can't be less than 0"]
         }
     },
