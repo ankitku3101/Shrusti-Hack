@@ -30,42 +30,43 @@ const Dashboard: React.FC = () => {
   if (!isClient) return null; 
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600"> {/* More vibrant background */}
       {/* Header */}
-      <header className="bg-blue-600 text-white p-4 shadow-lg">
-        <h1 className="text-xl font-bold">Survey Agent Dashboard</h1>
+      <header className="bg-indigo-700 text-white p-4 shadow-lg text-center">
+        <h1 className="text-3xl font-bold">Survey Agent Dashboard</h1>
       </header>
+
 
       {/* Main Content */}
       <div className="p-6">
-        <div className="bg-white shadow-2xl rounded-lg p-8">
-          <h2 className="text-2xl font-semibold mb-6">School Analytics</h2>
+        <div className="bg-white shadow-xl rounded-lg p-8">
+          <h2 className="text-2xl font-semibold mb-6 text-indigo-800">School Analytics</h2>
 
           {/* School Analytics */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="flex justify-between mb-4 p-4 border rounded-md bg-gray-100 shadow-sm">
-              <p className="text-lg">School Infrastructure Quality</p>
-              <p className="text-lg font-semibold">Rating: 4.2/5</p>
+            <div className="flex justify-between mb-4 p-4 border rounded-md bg-indigo-50 shadow-sm">
+              <p className="text-lg text-indigo-700">School Infrastructure Quality</p>
+              <p className="text-lg font-semibold text-indigo-700">Rating: 4.2/5</p>
             </div>
-            <div className="flex justify-between mb-4 p-4 border rounded-md bg-gray-100 shadow-sm">
-              <p className="text-lg">Number of Teachers</p>
-              <p className="text-lg font-semibold">35 Teachers</p>
+            <div className="flex justify-between mb-4 p-4 border rounded-md bg-indigo-50 shadow-sm">
+              <p className="text-lg text-indigo-700">Number of Teachers</p>
+              <p className="text-lg font-semibold text-indigo-700">35 Teachers</p>
             </div>
-            <div className="flex justify-between mb-4 p-4 border rounded-md bg-gray-100 shadow-sm">
-              <p className="text-lg">Student-Teacher Ratio</p>
-              <p className="text-lg font-semibold">20:1</p>
+            <div className="flex justify-between mb-4 p-4 border rounded-md bg-indigo-50 shadow-sm">
+              <p className="text-lg text-indigo-700">Student-Teacher Ratio</p>
+              <p className="text-lg font-semibold text-indigo-700">20:1</p>
             </div>
           </div>
 
           {/* Rating Section */}
           <div className="mb-6">
-            <h3 className="text-xl font-semibold">Rate the School</h3>
+            <h3 className="text-xl font-semibold text-indigo-800">Rate the School</h3>
             <div className="flex items-center space-x-2 mt-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   onClick={() => handleRatingChange(star)}
-                  className={`w-8 h-8 rounded-full ${rating >= star ? 'bg-yellow-400' : 'bg-gray-300'}`}
+                  className={`w-10 h-10 rounded-full ${rating >= star ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'} flex items-center justify-center`}
                 >
                   ★
                 </button>
@@ -75,12 +76,12 @@ const Dashboard: React.FC = () => {
 
           {/* Review Section */}
           <div className="mb-6">
-            <h3 className="text-xl font-semibold">Leave a Review</h3>
+            <h3 className="text-xl font-semibold text-indigo-800">Leave a Review</h3>
             <input
               type="text"
               value={review}
               onChange={handleReviewChange}
-              className="w-full p-3 border border-gray-300 rounded-md mt-2 shadow-sm"
+              className="w-full p-4 border border-indigo-300 rounded-md mt-2 shadow-md text-gray-800"
               placeholder="Write your review here"
             />
           </div>
@@ -88,7 +89,7 @@ const Dashboard: React.FC = () => {
           <div className="flex justify-center">
             <button
               onClick={handleSubmit}
-              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition"
+              className="bg-indigo-700 text-white px-6 py-3 rounded-md hover:bg-indigo-800 transition"
             >
               Submit Rating & Review
             </button>
@@ -97,7 +98,7 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-blue-600 text-white p-4 mt-6">
+      <footer className="bg-indigo-700 text-white p-4 mt-6">
         <p className="text-center">&copy; 2025 Survey Agent | All rights reserved.</p>
       </footer>
     </div>
