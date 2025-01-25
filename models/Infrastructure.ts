@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const InfrastructureSchema = new mongoose.Schema(
     {
-        schoolof:{
+        ofschool:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"School"
         },
