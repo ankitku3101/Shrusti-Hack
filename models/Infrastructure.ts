@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const InfrastructureSchema = new mongoose.Schema(
     {
+        schoolof:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"School"
+        },
         numberofclass:{
             type:Number,
             min:[0,"number of class can not be negative"],
