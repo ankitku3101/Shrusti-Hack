@@ -13,12 +13,17 @@
     "mongoose": "^8.9.5",
     "next": "15.1.6",
     "react": "^19.0.0",
+    "chart.js": "^4.4.7",
+    "next": "15.1.6",
+    "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
+    "@types/react-chartjs-2": "^2.0.2",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
