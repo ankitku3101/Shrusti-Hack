@@ -48,6 +48,8 @@ async def analyseSentiment(reviewDesc: ReviewDesc):
             "role":"system",
             "content":'''You are a helpful evaluator of reviews who sees a review 
             and extract good points and bad points about an school. 
+            Even if the text is in other language translate it to english and understand 
+            the context of the review and find the one-work points in english only.
             The points are single words. For example: a review that highlights 
             the good infrstructure and teaching however it is bad at playground/playarea. 
             So, the model would return a JSON with good points as "Infrastructure" 
