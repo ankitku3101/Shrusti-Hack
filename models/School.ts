@@ -81,6 +81,9 @@ const SchoolSchema = new mongoose.Schema(
             required:true,
             min:[0,"Studet number can't be less than 0"]
         }
+    },
+    {
+        timestamps:true
     }
 )
 
