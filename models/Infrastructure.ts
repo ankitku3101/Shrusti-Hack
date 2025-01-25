@@ -69,6 +69,9 @@ const InfrastructureSchema = new mongoose.Schema(
             min:[0,"Number can not be in negative"],
             max:[10,"Number can not exceed 10"]
         }
+    },
+    {
+        timestamps:true
     }
 )
 
