@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { unique } from "next/dist/build/utils";
 
 const SchoolSchema = new mongoose.Schema(
     {
@@ -7,6 +8,7 @@ const SchoolSchema = new mongoose.Schema(
             lowercase:true,
             trim:true,
             required:true,
+            unique:true,
         },
         password:{
             type:String,
@@ -79,6 +81,9 @@ const SchoolSchema = new mongoose.Schema(
             required:true,
             min:[0,"Studet number can't be less than 0"]
         }
+    },
+    {
+        timestamps:true
     }
 )
 
