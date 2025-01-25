@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/next-auth": "^3.13.0",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.7",
     "mongodb": "^6.12.0",
