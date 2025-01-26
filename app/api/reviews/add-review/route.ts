@@ -26,19 +26,38 @@ export async function POST(request:NextRequest){
             tags
         })
 
+        const getProsandcons = await fetch(`${process.env.FAST_API_URL}`,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'accept':'application/json'
+            },
+            body: JSON.stringify({review:reviewtext})
+        })
+
+        const finalvalues = await getProsandcons.json();
+        const {good,bad} = finalvalues;
+
         // Check if Survey exists, if not create one
-        let updatingSurvey = await Survey.findOne({SchoolDoc: ofschool});
-        
+        let updatingSurvey;
         if (!updatingSurvey) {
             updatingSurvey = await Survey.create({
                 SchoolDoc: ofschool,
-                ReviewDoc: [ReviewObject._id]
+                ReviewDoc: [ReviewObject._id],
+                pros: good,
+                cons: bad
             });
         } else {
             updatingSurvey = await Survey.findOneAndUpdate(
                 {SchoolDoc: ofschool},
-                {$push: {ReviewDoc: ReviewObject._id}},
-                {new: true}
+                {
+                    $push: { ReviewDoc: ReviewObject._id },
+                    $addToSet: { 
+                        pros: { $each: good },
+                        cons: { $each: bad }
+                    }
+                },
+                { new: true }
             )
         }
 
