@@ -91,12 +91,6 @@ const SignIn = () => {
             {isSubmitting ? "Signing in..." : "Sign In"}
           </button>
         </form>
-        <p className="mt-4 text-sm text-gray-600 text-center">
-          Don’t have an account?{" "}
-          <a href="/auth/signup" className="text-blue-600 hover:underline">
-            Sign up
-          </a>
-        </p>
       </div>
     </div>
   );
