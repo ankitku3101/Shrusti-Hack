@@ -21,8 +21,12 @@ export async function POST(request:NextRequest){
             return NextResponse.json({message:"Invalid school id"},{status:401})
         }
 
-        if([reviewtext,rating,tags].some((field)=>field?.trim()==="")){
+        if([reviewtext,tags].some((field)=>field?.trim()==="")){
             return NextResponse.json({message:"Some fields are missing"},{status:400})
+        }
+
+        if(!rating){
+            return NextResponse.json({message:"rating is missing"},{status:401});
         }
 
         /**
@@ -43,7 +47,7 @@ export async function POST(request:NextRequest){
             {new : true}
         )
 
-        return NextResponse.json({message:"Review Created Succesfully",data:updatingSurvey},{status:201})
+        return NextResponse.json({message:"Review Created Succesfully",data:{updatingSurvey,ReviewObject}},{status:201})
 
     } catch (error) {
         return NextResponse.json(
