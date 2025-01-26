@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-blue-50">
       {/* Header */}
       <header className="bg-blue-600 text-white p-4 shadow-md">
-        <h1 className="text-2xl font-bold text-center">Rural Education Insights Dashboard</h1>
+        <h1 className="text-2xl font-bold text-center">School Insights Platform Dashboard</h1>
       </header>
 
       {/* Main Body */}
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
 
       {/* Footer */}
       <footer className="bg-blue-600 text-white p-4 text-center">
-        <p>&copy; 2025 Rural Education Insights. All rights reserved.</p>
+        <p>&copy; 2025 School Insights Platform. All rights reserved.</p>
       </footer>
     </div>
   );
