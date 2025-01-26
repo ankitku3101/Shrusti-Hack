@@ -1,12 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next'; // Use NextApiRequest and NextApiResponse from 'next'
+import { NextRequest, NextResponse } from 'next/server'; // Use NextRequest and NextResponse from next/server
 import dbConnect from '@/lib/mongodb'; // Ensure a database connection utility is available
 import School from '@/models/School'; // Import the School model
 import { getServerSession } from 'next-auth'; // Import NextAuth's server session utility
 import { authOptions } from '@/lib/authOptions'; // Import your NextAuth configuration
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ success: false, message: 'Method not allowed' });
+        return NextResponse.json({ success: false, message: 'Method not allowed' }, { status: 405 });
     }
 
     try {
@@ -14,10 +14,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await dbConnect();
 
         // Get the session from NextAuth
-        const session = await getServerSession(req, res, authOptions);
+        const session = await getServerSession({ req, ...authOptions }); // Corrected to pass `req` in the object
 
         if (!session || session.user.role !== 'admin') {
-            return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+            return NextResponse.json({ success: false, message: 'Access denied. Admins only.' }, { status: 403 });
         }
 
         // Extract school data from the request body
@@ -30,14 +30,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             location,
             numberofstudents,
             numberofteacher,
-        } = req.body;
+        } = await req.json();
 
         // Validate required fields
         if (!email || !password || !username || !contact || !schoolname || !location?.state || !location?.district || !location?.town) {
-            return res.status(400).json({
+            return NextResponse.json({
                 success: false,
                 message: 'Missing required fields',
-            });
+            }, { status: 400 });
         }
 
         // Create a new school document
@@ -55,22 +55,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Save the school to the database
         await school.save();
 
-        return res.status(201).json({
+        return NextResponse.json({
             success: true,
             message: 'School added successfully',
             data: school,
-        });
+        }, { status: 201 });
     } catch (error) {
         console.error('Error adding school:', error);
         if (error.code === 11000) {
-            return res.status(409).json({
+            return NextResponse.json({
                 success: false,
                 message: 'Email already exists',
-            });
+            }, { status: 409 });
         }
-        return res.status(500).json({
+        return NextResponse.json({
             success: false,
             message: 'Internal server error',
-        });
+        }, { status: 500 });
     }
 }
