@@ -1,9 +1,10 @@
+import { NextApiRequest, NextApiResponse } from 'next'; // Use NextApiRequest and NextApiResponse from 'next'
 import dbConnect from '@/lib/mongodb'; // Ensure a database connection utility is available
 import School from '@/models/School'; // Import the School model
 import { getServerSession } from 'next-auth'; // Import NextAuth's server session utility
 import { authOptions } from '@/lib/authOptions'; // Import your NextAuth configuration
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
         return res.status(405).json({ success: false, message: 'Method not allowed' });
     }
