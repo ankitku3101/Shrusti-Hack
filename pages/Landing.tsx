@@ -1,95 +1,108 @@
-"use client"; // Ensure that this component is rendered on the client-side
+"use client"
 
-import Image from 'next/image';
 
-export default function Home() {
-  // Handling the Explore Insights button click using window.location.href
-  const handleReviewForm = () => {
-    window.location.href = "/add-review"; // Redirect to the form page
-  };
+import React from 'react'
 
-  // Handling the Sign In button click using window.location.href
-  const handleSignIn = () => {
-    window.location.href = "auth/signin"; // Redirect to the sign-in page
-  };
+import { ClipboardList, MessageCircle, BarChart3, Users } from "lucide-react"
 
+const features = [
+  {
+    title: "Comprehensive Surveys",
+    description: "Gather in-depth data on school infrastructure, teaching quality, and resources.",
+    icon: ClipboardList,
+  },
+  {
+    title: "Student & Parent Feedback",
+    description: "Collect valuable insights directly from those most impacted by the education system.",
+    icon: MessageCircle,
+  },
+  {
+    title: "Data-Driven Decisions",
+    description: "Analyze trends and patterns to make informed improvements in education.",
+    icon: BarChart3,
+  },
+  {
+    title: "Community Engagement",
+    description: "Involve local communities in the process of enhancing rural education.",
+    icon: Users,
+  },
+]
+
+function Landing() {
   return (
-    <div className="bg-gradient-to-br from-teal-500 via-purple-500 to-indigo-600 text-white min-h-screen">
-      {/* Header Section */}
-      <header className="relative py-24 px-6 text-center">
-        <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-teal-500 to-indigo-600 opacity-50 z-0"></div>
-        <div className="relative z-10">
-          <h1 className="text-6xl font-extrabold text-white mb-6">
-            Transform your School Data into Insights 🚀
-          </h1>
-          <p className="text-lg text-white font-light mb-6">
-            Empower schools with real-time dashboards, actionable insights, and enhanced decision-making.
-          </p>
-          <div className="flex justify-center gap-6">
-            {/* Explore Insights Button */}
-            <button 
-              onClick={handleReviewForm} 
-              className="bg-yellow-300 hover:bg-yellow-400 text-black font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out">
-              Review Form
-            </button>
-            {/* Sign In Button - Placed on the side */}
-            <button 
-              onClick={handleSignIn} 
-              className="bg-transparent text-white border-2 border-white py-2 px-6 rounded-full hover:bg-white hover:text-gray-900 transition duration-300 ease-in-out">
-              Sign In
-            </button>
+    <div>
+      <div
+        style={{
+          backgroundImage: `url(${'/landing.jpg'})`,
+          backgroundSize: 'cover',
+          backgroundBlendMode: 'overlay',
+        }}
+        className="bg-center h-screen w-full flex flex-col items-center justify-center bg-[#140932] antialiased bg-grid-white/[0.02] relative overflow-hidden"
+      >
+        <h1 className='text-center text-6xl text-white font-semibold p-2'>
+          Empowering Rural Education
+        </h1>
+        <p className='text-center tracking-wider text-xl text-white p-4'>
+          Analyze, Improve, and Transform Schools in Rural India
+        </p>
+        <div className="flex gap-4 p-6">
+          <button className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
+            Sign In (For Schools)
+          </button>
+          <button className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
+            Submit Survey
+          </button>
+          <button className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
+            Submit School Feedback
+          </button>
+        </div>
+      </div>
+      <div className='bg-blue-50/20'>
+        <section className="p-12 text-gray-900">
+          <h2 className="text-center text-5xl font-bold mb-8">What We Do ?</h2>
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="bg-teal-100 p-16 rounded-lg shadow-lg ">
+              <h3 className="text-xl font-semibold mb-4 text-teal-900 ">Real-Time Dashboards</h3>
+              <p>
+                Monitor school performance metrics and satisfaction levels in real-time with dynamic visualizations.
+              </p>
+            </div>
+            <div className="bg-indigo-100 p-16 rounded-lg shadow-lg">
+              <h3 className="text-xl font-semibold mb-4 text-indigo-900">Advanced Analytics</h3>
+              <p>
+                Leverage scripting tools for in-depth analysis of performance and satisfaction data.
+              </p>
+            </div>
+            <div className="bg-purple-100 p-16 rounded-lg shadow-lg">
+              <h3 className="text-xl font-semibold mb-4 text-purple-900">Survey Integration</h3>
+              <p>
+                Collect feedback with Batoi Insight surveys and turn it into actionable insights.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div className='h-screen bg-blue-100 p-16'>
+        <div className="container mx-auto px-4">
+          <h2 className="text-5xl font-bold text-center mb-12">Why Surveys and Feedback Matter</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-white p-16 rounded-lg shadow-md">
+                <div className='flex items-center gap-6'>
+                  <feature.icon className="h-12 w-12 mb-4 text-blue-600 " />
+                  <h3 className="text-2xl font-semibold mb-2">{feature.title}</h3>
+                </div>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </header>
-
-      {/* Key Features Section */}
-      <section className="py-16 bg-gradient-to-r from-orange-200 to-yellow-200 text-gray-900">
-        <h2 className="text-center text-3xl font-bold mb-8">Key Features</h2>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-teal-100 p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4 text-teal-900">Real-Time Dashboards</h3>
-            <p>
-              Monitor school performance metrics and satisfaction levels in real-time with dynamic visualizations.
-            </p>
-          </div>
-          <div className="bg-indigo-100 p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4 text-indigo-900">Advanced Analytics</h3>
-            <p>
-              Leverage scripting tools for in-depth analysis of performance and satisfaction data.
-            </p>
-          </div>
-          <div className="bg-purple-100 p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-semibold mb-4 text-purple-900">Survey Integration</h3>
-            <p>
-              Collect feedback with Batoi Insight surveys and turn it into actionable insights.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* What They Say Section */}
-      <section className="py-16 bg-gradient-to-r from-teal-50 to-blue-50 text-gray-800">
-        <h2 className="text-center text-3xl font-bold mb-8">What They Say</h2>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-teal-100 p-6 rounded-lg shadow-lg">
-            <p>
-              "This platform revolutionized the way we analyze student satisfaction and school performance!"
-            </p>
-            <p className="mt-4 font-bold">- Principal, XYZ School</p>
-          </div>
-          <div className="bg-indigo-100 p-6 rounded-lg shadow-lg">
-            <p>
-              "Real-time dashboards helped us focus on critical areas and improve overall infrastructure."
-            </p>
-            <p className="mt-4 font-bold">- Admin, ABC School</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer Section */}
-      <footer className="text-center py-8 bg-gray-900 text-white">
-        <p className="text-sm font-light">&copy; 2025 School Insights Platform. All Rights Reserved.</p>
+      </div>
+      <footer className="text-center py-4 bg-blue-600 text-white">
+         <p className="text-sm font-light">&copy; 2025 School Insights Platform. All Rights Reserved.</p>
       </footer>
     </div>
-  );
+  )
 }
+
+export default Landing
