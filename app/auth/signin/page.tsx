@@ -1,18 +1,33 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { status } = useSession();
   const router = useRouter();
+
+  // Redirect if already authenticated
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.push("/");
+  //   }
+  // }, [status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      toast.error("Please fill out all fields.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     const result = await signIn("credentials", {
@@ -25,7 +40,7 @@ const SignIn = () => {
 
     if (result?.ok) {
       toast.success("Logged in successfully!");
-      router.push("/"); // Redirect to a secure page
+      router.push("/");
     } else {
       toast.error(result?.error || "Invalid credentials");
     }
@@ -67,7 +82,7 @@ const SignIn = () => {
           <button
             type="submit"
             className={`w-full py-2 px-4 text-white font-semibold rounded-lg ${
-              isSubmitting ? "bg-blue-300" : "bg-blue-600 hover:bg-blue-700"
+              isSubmitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
             } focus:outline-none focus:ring focus:ring-blue-500`}
             disabled={isSubmitting}
           >
