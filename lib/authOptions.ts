@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import School from "@/models/School";
+import Admin from "@/models/Admin";
 import dbConnect from "@/lib/mongodb";
 
 export const authOptions: NextAuthOptions = {
@@ -9,41 +10,42 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Email", type: "text", placeholder: "Enter your email" },
+        email: { label: "Email", type: "text", placeholder: "Enter your email" },
         password: { label: "Password", type: "password", placeholder: "Enter your password" },
       },
       async authorize(credentials: any) {
         try {
-          const { username: email, password } = credentials;
-
+          const { email, password } = credentials;
+          console.log(credentials);
+          
+      
           if (!email || !password) {
             throw new Error("Email and password are required");
           }
-
+      
           await dbConnect();
-
-          const user = await School.findOne({ email });
-
+      
+          const user = (await School.findOne({ email })) || (await Admin.findOne({ email }));
+      
           if (!user) {
             throw new Error("Invalid email or password");
           }
-
+      
           const isPasswordValid = await bcrypt.compare(password, user.password);
-
           if (!isPasswordValid) {
             throw new Error("Invalid email or password");
           }
-
+      
           return {
             id: user._id.toString(),
             email: user.email,
             name: user.name,
           };
         } catch (error) {
-          console.error("Authorization error:", error.message);
+          console.error("Authorization error:", error.message); 
           return null;
         }
-      },
+      }      
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
