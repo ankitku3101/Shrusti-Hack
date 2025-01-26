@@ -1,92 +1,75 @@
-import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import Admin from "@/models/Admin"; // Import Admin model to verify role
-import School from "@/models/School"; 
-import dbConnect from "@/lib/mongodb";
+import dbConnect from '@/lib/mongodb'; // Ensure a database connection utility is available
+import School from '@/models/School'; // Import the School model
+import { getServerSession } from 'next-auth'; // Import NextAuth's server session utility
+import { authOptions } from '@/lib/authOptions'; // Import your NextAuth configuration
 
-export async function POST(request: NextRequest) {
-  try {
-    // Parse the JSON body of the request
-    const {
-      email,
-      password,
-      username,
-      contact,
-      schoolname,
-      location,
-      numberofstudents,
-      numberofteacher,
-      adminEmail,
-    } = await request.json();
-
-    // Check if all required fields are provided
-    if (
-      !email ||
-      !password ||
-      !username ||
-      !contact ||
-      !schoolname ||
-      !location?.state ||
-      !location?.district ||
-      !location?.town ||
-      !adminEmail
-    ) {
-      return NextResponse.json(
-        { message: "All required fields must be filled" },
-        { status: 400 }
-      );
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ success: false, message: 'Method not allowed' });
     }
 
-    // Connect to the database
-    await dbConnect();
+    try {
+        // Ensure database connection
+        await dbConnect();
 
-    // Verify Admin Role
-    const admin = await Admin.findOne({ email: adminEmail });
+        // Get the session from NextAuth
+        const session = await getServerSession(req, res, authOptions);
 
-    if (!admin || admin.role !== "admin") {
-      return NextResponse.json(
-        { message: "Unauthorized: Admin role required" },
-        { status: 403 }
-      );
+        if (!session || session.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+        }
+
+        // Extract school data from the request body
+        const {
+            email,
+            password,
+            username,
+            contact,
+            schoolname,
+            location,
+            numberofstudents,
+            numberofteacher,
+        } = req.body;
+
+        // Validate required fields
+        if (!email || !password || !username || !contact || !schoolname || !location?.state || !location?.district || !location?.town) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields',
+            });
+        }
+
+        // Create a new school document
+        const school = new School({
+            email,
+            password, // Ideally, hash the password before storing it
+            username,
+            contact,
+            schoolname,
+            location,
+            numberofstudents,
+            numberofteacher,
+        });
+
+        // Save the school to the database
+        await school.save();
+
+        return res.status(201).json({
+            success: true,
+            message: 'School added successfully',
+            data: school,
+        });
+    } catch (error) {
+        console.error('Error adding school:', error);
+        if (error.code === 11000) {
+            return res.status(409).json({
+                success: false,
+                message: 'Email already exists',
+            });
+        }
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
     }
-
-    // Check if the email already exists for the school
-    const existingSchool = await School.findOne({ email });
-    if (existingSchool) {
-      return NextResponse.json(
-        { message: "School with this email already exists" },
-        { status: 409 }
-      );
-    }
-
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create new school document
-    const newSchool = new School({
-      email,
-      password: hashedPassword,
-      username,
-      contact,
-      schoolname,
-      location,
-      numberofstudents,
-      numberofteacher,
-    });
-
-    // Save the new school to the database
-    await newSchool.save();
-
-    // Respond with success
-    return NextResponse.json(
-      { message: "School registered successfully" },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Error adding school:", error);
-    return NextResponse.json(
-      { message: "An error occurred while adding the school" },
-      { status: 500 }
-    );
-  }
 }
