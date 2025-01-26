@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import axios from "axios";
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const SystemAdminDashboard = () => {
@@ -25,19 +25,6 @@ const SystemAdminDashboard = () => {
     }
   }, [session, status, router]);
 
-  // Fetch data from MongoDB using an API endpoint
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("/api/system-admin-dashboard");
-  //       setDashboardData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching dashboard data: ", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
   const COLORS = ["#FF8A00", "#FF7043", "#FF5722", "#6200EA"];
 
   if (status === "loading") {
@@ -50,18 +37,25 @@ const SystemAdminDashboard = () => {
       <header className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white py-8 shadow-md">
         <div className="max-w-screen-xl mx-auto flex justify-between items-center">
           <h1 className="text-4xl font-bold mb-4">System Admin Dashboard</h1>
-            <div className="flex gap-6">
-              <button className="bg-yellow-400 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors">
-                Notifications
-              </button>
-              <button 
-                onClick={() => {
-                  router.push("/admin/add-school");
-                }}
-                className="bg-green-400 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors">
-                Add School
-              </button>
-            </div>
+          <div className="flex gap-6">
+            <button className="bg-yellow-400 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors">
+              Notifications
+            </button>
+            <button
+              onClick={() => {
+                router.push("/admin/add-school");
+              }}
+              className="bg-green-400 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-yellow-500 transition-colors"
+            >
+              Add School
+            </button>
+            <button
+              onClick={() => signOut()}
+              className="bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition-colors"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </header>
 
