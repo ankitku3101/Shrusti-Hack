@@ -3,10 +3,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+// Define the type for the school data
+interface School {
+  _id: string;
+  schoolname: string;
+  location: object; // You can expand this to a more specific type if needed
+}
+
 const SatisfactionSurveyForm = () => {
   const [formData, setFormData] = useState({
     role: "Parent", // Default selection
-    ofschool: "", // Replacing schoolName with ofschool
+    ofschool: "",
     clarity: "",
     resses: "",
     evaluation: "",
@@ -16,7 +23,8 @@ const SatisfactionSurveyForm = () => {
     environment: "Friendly", // Default selection
   });
 
-  const [schools, setSchools] = useState([]); // List of schools
+  // Specify the type of schools as an array of School objects
+  const [schools, setSchools] = useState<School[]>([]); // List of schools
   const [message, setMessage] = useState("");
 
   // Fetch school names from the backend
@@ -24,9 +32,17 @@ const SatisfactionSurveyForm = () => {
     const fetchSchools = async () => {
       try {
         const response = await axios.get("/api/school/get-all-schools");
-        console.log("API Response:", response.data); // Debugging
-        if (response.data?.schools && Array.isArray(response.data.schools)) {
-          setSchools(response.data.schools); // Set schools if valid data is present
+
+        // Debugging response structure
+        console.log("Full API Response:", response.data);
+
+        // Destructure message and data
+        const { message: resMessage, data } = response.data;
+        console.log("Destructured response:", resMessage, data);
+
+        // Validate data format
+        if (Array.isArray(data)) {
+          setSchools(data); // Set schools if valid data is present
         } else {
           console.error("Invalid schools data format:", response.data);
           setSchools([]); // Default to an empty list
@@ -41,7 +57,7 @@ const SatisfactionSurveyForm = () => {
   }, []);
 
   // Handle form data changes
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -50,10 +66,10 @@ const SatisfactionSurveyForm = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/system-admin-dashboard", formData);
+      const response = await axios.post("/api/satisfaction/add-survey", formData);
       setMessage(response.data.message); // Show success message
     } catch (error) {
       setMessage(error.response?.data?.message || "An error occurred."); // Show error message
