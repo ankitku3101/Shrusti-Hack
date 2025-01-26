@@ -4,16 +4,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-// Define the type for the school data
 interface School {
   _id: string;
   schoolname: string;
-  location: object; // You can expand this to a more specific type if needed
+  location: object;
 }
 
 const SatisfactionSurveyForm = () => {
   const [formData, setFormData] = useState({
-    role: "Parent", // Default selection
+    role: "Parent",
     ofschool: "",
     clarity: "",
     resses: "",
@@ -21,106 +20,81 @@ const SatisfactionSurveyForm = () => {
     studymaterial: "",
     safety: "",
     extracurricular: "",
-    environment: "Friendly", // Default selection
+    environment: "Friendly",
   });
 
-  const [schools, setSchools] = useState<School[]>([]); // List of schools
+  const [schools, setSchools] = useState<School[]>([]);
   const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
-  // Fetch school names from the backend
   useEffect(() => {
     const fetchSchools = async () => {
       try {
         const response = await axios.get("/api/school/get-all-schools");
-
-        // Debugging response structure
-        console.log("Full API Response:", response.data);
-
-        // Destructure message and data
-        const { message: resMessage, data } = response.data;
-        console.log("Destructured response:", resMessage, data);
-
-        // Validate data format
-        if (Array.isArray(data)) {
-          setSchools(data); // Set schools if valid data is present
-        } else {
-          console.error("Invalid schools data format:", response.data);
-          setSchools([]); // Default to an empty list
-        }
+        const { data } = response.data;
+        setSchools(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching schools:", error.message);
-        setSchools([]); // Default to an empty list
+        setSchools([]);
       }
     };
 
     fetchSchools();
   }, []);
 
-  // Handle form data changes
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/survey/satisfaction/add-survey", formData);
       setMessage(response.data.message);
-      router.push('/')
+      setIsSuccess(true);
     } catch (error: any) {
-      // Log the full error object to understand what's going wrong
       console.error("Error submitting form:", error);
-      console.error("Error response:", error.response);
-      setMessage(error.response?.data?.message || "An error occurred."); // Show error message
+      setMessage(error.response?.data?.message || "An error occurred.");
+      setIsSuccess(false);
     }
   };
 
+  const handleRedirect = () => {
+    router.push("/");
+  };
+
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md mt-10">
+    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md mt-10">
       <h1 className="text-2xl font-bold mb-6 text-center">Satisfaction Survey</h1>
 
-      {message && (
-        <p
-          className={`text-center mb-4 font-semibold ${
-            message.includes("Thank you") ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          {message}
-        </p>
-      )}
-
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Role Selection */}
-        <label className="block mb-2 font-semibold">I am a:</label>
+        <label className="block font-semibold">I am a:</label>
         <select
           name="role"
           value={formData.role}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded-md"
+          className="w-full p-2 border rounded-md"
         >
           <option value="Parent">Parent</option>
           <option value="Student">Student</option>
         </select>
 
         {/* School Selection */}
-        <label className="block mb-2 font-semibold">School:</label>
+        <label className="block font-semibold">School:</label>
         <select
           name="ofschool"
           value={formData.ofschool}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded-md"
+          className="w-full p-2 border rounded-md"
           required
         >
           <option value="">Select a school</option>
           {schools.map((school) => (
             <option key={school._id} value={school._id}>
-              {school.schoolname} {/* Display the schoolname field */}
+              {school.schoolname}
             </option>
           ))}
         </select>
@@ -129,9 +103,7 @@ const SatisfactionSurveyForm = () => {
         {["clarity", "resses", "evaluation", "studymaterial", "safety", "extracurricular"].map(
           (field) => (
             <div key={field}>
-              <label className="block mb-2 font-semibold capitalize">
-                {field} (0-10):
-              </label>
+              <label className="block font-semibold capitalize">{field} (0-10):</label>
               <input
                 type="number"
                 name={field}
@@ -139,7 +111,7 @@ const SatisfactionSurveyForm = () => {
                 onChange={handleChange}
                 min="0"
                 max="10"
-                className="w-full p-2 mb-4 border rounded-md"
+                className="w-full p-2 border rounded-md"
                 required
               />
             </div>
@@ -147,12 +119,12 @@ const SatisfactionSurveyForm = () => {
         )}
 
         {/* Environment */}
-        <label className="block mb-2 font-semibold">Environment:</label>
+        <label className="block font-semibold">Environment:</label>
         <select
           name="environment"
           value={formData.environment}
           onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded-md"
+          className="w-full p-2 border rounded-md"
         >
           <option value="Friendly">Friendly</option>
           <option value="Average">Average</option>
@@ -167,6 +139,25 @@ const SatisfactionSurveyForm = () => {
         >
           Submit
         </button>
+
+        {/* Message Below Submit Button */}
+        {message && (
+          <div
+            className={`text-center mt-4 font-semibold ${
+              isSuccess ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {message}
+            {isSuccess && (
+              <button
+                onClick={handleRedirect}
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-600"
+              >
+                Go to Homepage
+              </button>
+            )}
+          </div>
+        )}
       </form>
     </div>
   );
