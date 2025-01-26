@@ -1,5 +1,5 @@
 import SystemAdminDashboard from '@/pages/SystemAdminDashboard';
- 
+
 
 const Dashboard = () => {
   return (

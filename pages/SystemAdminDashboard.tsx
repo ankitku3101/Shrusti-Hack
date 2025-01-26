@@ -4,6 +4,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import axios from "axios";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import OverAllRanking from "@/components/OverAllRanking";
 
 const SystemAdminDashboard = () => {
   const { data: session, status } = useSession();
@@ -65,24 +66,24 @@ const SystemAdminDashboard = () => {
           {/* Total Schools */}
           <div className="bg-white p-4 rounded-lg shadow-lg text-center">
             <h2 className="text-xl font-semibold text-gray-700">Total Schools</h2>
-            <p className="text-2xl font-bold text-blue-600">{dashboardData.totalSchools}</p>
+            <p className="text-2xl font-bold text-blue-600">{dashboardData.totalSchools || 10}</p>
           </div>
 
           {/* Active Survey Agents */}
           <div className="bg-white p-4 rounded-lg shadow-lg text-center">
             <h2 className="text-xl font-semibold text-gray-700">Active Survey Agents</h2>
-            <p className="text-2xl font-bold text-green-600">{dashboardData.activeAgents}</p>
+            <p className="text-2xl font-bold text-green-600">{dashboardData.activeAgents || 3}</p>
           </div>
 
           {/* Pending Issues */}
           <div className="bg-white p-4 rounded-lg shadow-lg text-center">
             <h2 className="text-xl font-semibold text-gray-700">Pending Issues</h2>
-            <p className="text-2xl font-bold text-red-600">{dashboardData.pendingIssues}</p>
+            <p className="text-2xl font-bold text-red-600">{dashboardData.pendingIssues || 7}</p>
           </div>
         </div>
 
         {/* Performance Overview */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        {/* <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4 text-gray-700">School Performance Overview</h2>
           <PieChart width={400} height={400}>
             <Pie
@@ -105,15 +106,17 @@ const SystemAdminDashboard = () => {
             <Tooltip />
             <Legend />
           </PieChart>
-        </div>
+        </div> */}
 
         {/* Export Report Button */}
-        <div className="flex justify-end mt-6">
+        {/* <div className="flex justify-end mt-6">
           <button className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-green-600 transition-colors">
             Export Report
           </button>
-        </div>
+        </div> */}
       </main>
+
+      <OverAllRanking/>
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white p-4 mt-6">
