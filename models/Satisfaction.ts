@@ -40,6 +40,11 @@ const SatisfactionSchema = new mongoose.Schema(
             type:String,
             enum:['Friendly',"Average",'Depressive','hostile']
         },
+        OVERALLRATE:{
+            type:Number,
+            min:[0,"Number can not be in negative"],
+            max:[10,"Number can not exceed 10"]
+        }
     },
     {
         timestamps:true
