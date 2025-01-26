@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const SatisfactionSurveyForm = () => {
   const [formData, setFormData] = useState({
     role: "Parent", // Default selection
-    ofschool: "",
+    ofschool: "", // Replacing schoolName with ofschool
     clarity: "",
     resses: "",
     evaluation: "",
@@ -16,8 +16,31 @@ const SatisfactionSurveyForm = () => {
     environment: "Friendly", // Default selection
   });
 
+  const [schools, setSchools] = useState([]); // List of schools
   const [message, setMessage] = useState("");
 
+  // Fetch school names from the backend
+  useEffect(() => {
+    const fetchSchools = async () => {
+      try {
+        const response = await axios.get("/api/school/get-all-schools");
+        console.log("API Response:", response.data); // Debugging
+        if (response.data?.schools && Array.isArray(response.data.schools)) {
+          setSchools(response.data.schools); // Set schools if valid data is present
+        } else {
+          console.error("Invalid schools data format:", response.data);
+          setSchools([]); // Default to an empty list
+        }
+      } catch (error) {
+        console.error("Error fetching schools:", error.message);
+        setSchools([]); // Default to an empty list
+      }
+    };
+
+    fetchSchools();
+  }, []);
+
+  // Handle form data changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -26,13 +49,14 @@ const SatisfactionSurveyForm = () => {
     });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/system-admin-dashboard", formData);
-      setMessage(response.data.message);
+      setMessage(response.data.message); // Show success message
     } catch (error) {
-      setMessage(error.response?.data?.message || "An error occurred.");
+      setMessage(error.response?.data?.message || "An error occurred."); // Show error message
     }
   };
 
@@ -63,42 +87,43 @@ const SatisfactionSurveyForm = () => {
           <option value="Student">Student</option>
         </select>
 
-        {/* ofschool */}
-        <label className="block mb-2 font-semibold">School ID:</label>
-        <input
-          type="text"
+        {/* School Selection */}
+        <label className="block mb-2 font-semibold">School:</label>
+        <select
           name="ofschool"
           value={formData.ofschool}
           onChange={handleChange}
           className="w-full p-2 mb-4 border rounded-md"
           required
-        />
+        >
+          <option value="">Select a school</option>
+          {schools.map((school) => (
+            <option key={school._id} value={school._id}>
+              {school.schoolname} {/* Display the schoolname field */}
+            </option>
+          ))}
+        </select>
 
         {/* Numeric Fields */}
-        {[
-          "clarity",
-          "resses",
-          "evaluation",
-          "studymaterial",
-          "safety",
-          "extracurricular",
-        ].map((field) => (
-          <div key={field}>
-            <label className="block mb-2 font-semibold capitalize">
-              {field} (0-10):
-            </label>
-            <input
-              type="number"
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              min="0"
-              max="10"
-              className="w-full p-2 mb-4 border rounded-md"
-              required
-            />
-          </div>
-        ))}
+        {["clarity", "resses", "evaluation", "studymaterial", "safety", "extracurricular"].map(
+          (field) => (
+            <div key={field}>
+              <label className="block mb-2 font-semibold capitalize">
+                {field} (0-10):
+              </label>
+              <input
+                type="number"
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                min="0"
+                max="10"
+                className="w-full p-2 mb-4 border rounded-md"
+                required
+              />
+            </div>
+          )
+        )}
 
         {/* Environment */}
         <label className="block mb-2 font-semibold">Environment:</label>
