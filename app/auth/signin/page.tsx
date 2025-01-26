@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
@@ -10,15 +10,8 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { status } = useSession();
+  const [error, setError] = useState('');
   const router = useRouter();
-
-  // Redirect if already authenticated
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     router.push("/");
-  //   }
-  // }, [status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +31,20 @@ const SignIn = () => {
 
     setIsSubmitting(false);
 
-    if (result?.ok) {
-      toast.success("Logged in successfully!");
-      router.push("/");
+    if (result?.error) {
+      setError('Invalid email or password');
     } else {
-      toast.error(result?.error || "Invalid credentials");
+      setError('');
+      const session = await getSession();
+      const role = session?.user?.role;
+
+      if (role === 'user') {
+        router.push('/school/dashboard');
+      } else if (role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/');
+      }
     }
   };
 

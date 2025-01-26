@@ -9,4 +9,4 @@ const Dashboard = () => {
   );
 };
 
-export default SystemAdminDashboard;
+export default Dashboard;
