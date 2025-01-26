@@ -149,7 +149,7 @@ const SatisfactionSurveyForm = () => {
           <option value="Friendly">Friendly</option>
           <option value="Average">Average</option>
           <option value="Depressive">Depressive</option>
-          <option value="Hostile">Hostile</option>
+          <option value="hostile">Hostile</option>
         </select>
 
         {/* Submit Button */}
