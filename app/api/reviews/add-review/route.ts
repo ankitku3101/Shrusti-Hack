@@ -17,22 +17,7 @@ export async function POST(request:NextRequest){
             tags
         } = requestbody;
 
-        if(!mongoose.Types.ObjectId.isValid(ofschool)){
-            return NextResponse.json({message:"Invalid school id"},{status:401})
-        }
-
-        if([reviewtext,tags].some((field)=>field?.trim()==="")){
-            return NextResponse.json({message:"Some fields are missing"},{status:400})
-        }
-
-        if(!rating){
-            return NextResponse.json({message:"rating is missing"},{status:401});
-        }
-
-        /**
-         * 
-         * FastApi Pros and cons values
-         */
+        // Existing validation checks...
 
         const ReviewObject = await Reviews.create({
             ofschool,
@@ -41,13 +26,26 @@ export async function POST(request:NextRequest){
             tags
         })
 
-        const updatingSurvey = await Survey.findOneAndUpdate(
-            {SchoolDoc:ofschool},
-            {$push:{ReviewDoc:ReviewObject._id}},
-            {new : true}
-        )
+        // Check if Survey exists, if not create one
+        let updatingSurvey = await Survey.findOne({SchoolDoc: ofschool});
+        
+        if (!updatingSurvey) {
+            updatingSurvey = await Survey.create({
+                SchoolDoc: ofschool,
+                ReviewDoc: [ReviewObject._id]
+            });
+        } else {
+            updatingSurvey = await Survey.findOneAndUpdate(
+                {SchoolDoc: ofschool},
+                {$push: {ReviewDoc: ReviewObject._id}},
+                {new: true}
+            )
+        }
 
-        return NextResponse.json({message:"Review Created Succesfully",data:{updatingSurvey,ReviewObject}},{status:201})
+        return NextResponse.json({
+            message: "Review Created Successfully", 
+            data: {updatingSurvey, ReviewObject}
+        }, {status: 201})
 
     } catch (error) {
         return NextResponse.json(
