@@ -4,6 +4,7 @@
 import React from 'react'
 
 import { ClipboardList, MessageCircle, BarChart3, Users } from "lucide-react"
+import { useRouter } from 'next/navigation';
 
 const features = [
   {
@@ -29,6 +30,8 @@ const features = [
 ]
 
 function Landing() {
+
+  const router = useRouter();
   return (
     <div>
       <div
@@ -46,13 +49,25 @@ function Landing() {
           Analyze, Improve, and Transform Schools in Rural India
         </p>
         <div className="flex gap-4 p-6">
-          <button className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
+          <button 
+            onClick={() => {
+              router.push("/auth/signin");
+            }}
+            className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
             Sign In (For Schools)
           </button>
-          <button className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
-            Submit Survey
+          <button
+            onClick={() => {
+              router.push("/add-review");
+            }} 
+            className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
+            Submit Review
           </button>
-          <button className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
+          <button 
+            onClick={() => {
+              router.push("/satisfation");
+            }}
+            className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
             Submit School Feedback
           </button>
         </div>
