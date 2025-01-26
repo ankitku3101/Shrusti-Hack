@@ -23,7 +23,6 @@ const SatisfactionSurveyForm = () => {
     environment: "Friendly", // Default selection
   });
 
-  // Specify the type of schools as an array of School objects
   const [schools, setSchools] = useState<School[]>([]); // List of schools
   const [message, setMessage] = useState("");
 
@@ -69,9 +68,12 @@ const SatisfactionSurveyForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/satisfaction/add-survey", formData);
+      const response = await axios.post("/api/survey/satisfaction/add-survey", formData);
       setMessage(response.data.message); // Show success message
-    } catch (error) {
+    } catch (error: any) {
+      // Log the full error object to understand what's going wrong
+      console.error("Error submitting form:", error);
+      console.error("Error response:", error.response);
       setMessage(error.response?.data?.message || "An error occurred."); // Show error message
     }
   };
