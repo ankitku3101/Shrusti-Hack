@@ -53,11 +53,11 @@ const SatisfactionSurveyForm = () => {
     try {
       const response = await axios.post("/api/survey/satisfaction/add-survey", formData);
       setMessage(response.data.message);
-      setIsSuccess(true);
+      setIsSuccess(true); // Mark submission as successful
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setMessage(error.response?.data?.message || "An error occurred.");
-      setIsSuccess(false);
+      setIsSuccess(false); // Reset success state on error
     }
   };
 
@@ -66,29 +66,47 @@ const SatisfactionSurveyForm = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md mt-10">
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md mt-10">
       <h1 className="text-2xl font-bold mb-6 text-center">Satisfaction Survey</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      {message && (
+        <div
+          className={`text-center mb-4 font-semibold ${
+            isSuccess ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {message}
+          {isSuccess && (
+            <button
+              onClick={handleRedirect}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-600"
+            >
+              Go to Homepage
+            </button>
+          )}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
         {/* Role Selection */}
-        <label className="block font-semibold">I am a:</label>
+        <label className="block mb-2 font-semibold">I am a:</label>
         <select
           name="role"
           value={formData.role}
           onChange={handleChange}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 mb-4 border rounded-md"
         >
           <option value="Parent">Parent</option>
           <option value="Student">Student</option>
         </select>
 
         {/* School Selection */}
-        <label className="block font-semibold">School:</label>
+        <label className="block mb-2 font-semibold">School:</label>
         <select
           name="ofschool"
           value={formData.ofschool}
           onChange={handleChange}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 mb-4 border rounded-md"
           required
         >
           <option value="">Select a school</option>
@@ -103,7 +121,9 @@ const SatisfactionSurveyForm = () => {
         {["clarity", "resses", "evaluation", "studymaterial", "safety", "extracurricular"].map(
           (field) => (
             <div key={field}>
-              <label className="block font-semibold capitalize">{field} (0-10):</label>
+              <label className="block mb-2 font-semibold capitalize">
+                {field} (0-10):
+              </label>
               <input
                 type="number"
                 name={field}
@@ -111,7 +131,7 @@ const SatisfactionSurveyForm = () => {
                 onChange={handleChange}
                 min="0"
                 max="10"
-                className="w-full p-2 border rounded-md"
+                className="w-full p-2 mb-4 border rounded-md"
                 required
               />
             </div>
@@ -119,12 +139,12 @@ const SatisfactionSurveyForm = () => {
         )}
 
         {/* Environment */}
-        <label className="block font-semibold">Environment:</label>
+        <label className="block mb-2 font-semibold">Environment:</label>
         <select
           name="environment"
           value={formData.environment}
           onChange={handleChange}
-          className="w-full p-2 border rounded-md"
+          className="w-full p-2 mb-4 border rounded-md"
         >
           <option value="Friendly">Friendly</option>
           <option value="Average">Average</option>
@@ -139,25 +159,6 @@ const SatisfactionSurveyForm = () => {
         >
           Submit
         </button>
-
-        {/* Message Below Submit Button */}
-        {message && (
-          <div
-            className={`text-center mt-4 font-semibold ${
-              isSuccess ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {message}
-            {isSuccess && (
-              <button
-                onClick={handleRedirect}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-600"
-              >
-                Go to Homepage
-              </button>
-            )}
-          </div>
-        )}
       </form>
     </div>
   );
