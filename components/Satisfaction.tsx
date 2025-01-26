@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // Define the type for the school data
 interface School {
@@ -25,6 +26,7 @@ const SatisfactionSurveyForm = () => {
 
   const [schools, setSchools] = useState<School[]>([]); // List of schools
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   // Fetch school names from the backend
   useEffect(() => {
@@ -69,7 +71,8 @@ const SatisfactionSurveyForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post("/api/survey/satisfaction/add-survey", formData);
-      setMessage(response.data.message); // Show success message
+      setMessage(response.data.message);
+      router.push('/')
     } catch (error: any) {
       // Log the full error object to understand what's going wrong
       console.error("Error submitting form:", error);

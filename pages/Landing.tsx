@@ -65,7 +65,7 @@ function Landing() {
           </button>
           <button 
             onClick={() => {
-              router.push("/satisfation");
+              router.push("/satisfaction");
             }}
             className="w-64 px-8 py-2 rounded-md bg-blue-600 text-white font-bold transition duration-200 hover:bg-blue-300 hover:text-black border-2 border-transparent hover:border-blue-500">
             Submit School Feedback
