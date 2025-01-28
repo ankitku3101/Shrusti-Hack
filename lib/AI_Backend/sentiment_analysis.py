@@ -60,7 +60,7 @@ async def analyseSentiment(reviewDesc: ReviewDesc):
                 "bad": [],
             }
             
-            The available tags are : 
+            The available tags are (Please Stick to these tags only): 
                 Infrastructure
                 Teaching
                 Playground
